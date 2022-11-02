@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html id = "replace">
+<script type="text/javascript">
+
+
+var txtFile = "text.txt";
+var file = new File(txtFile);
+var str = "";
+
+file.open("r");
+while(!file.eof){
+    str+=file.readln() + "<br>";
+}
+
+file.close();
+
+document.write(str);
+
+reader.onload = function(e) {
+
+var text = reader.result;
+
+};
+
+reader.readAsText(file);
+Document.getElementById("p").innerHTML = text;
+</script>
+<p id = "p">hello there world</p>
+</html>
