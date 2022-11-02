@@ -1,7 +1,8 @@
 # Python Setup Link https://code.visualstudio.com/docs/python/python-tutorial
 import os
-from tkinter.messagebox import YES
 import openai
+openai.api_key = os.environ['key']
+
 
 # Initial message to explain the application and how to use it
 print("This application will take your answers and randomly pull locations that match what you wanted.")
@@ -61,7 +62,6 @@ if input("Would you like to answer additional questions to make the search more 
 
 print(qString)
 
-openai.api_key = "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"
 searchRequest = qString
 response = openai.Completion.create(
     model="text-davinci-002",
@@ -72,4 +72,3 @@ response = openai.Completion.create(
 
 print(response["choices"][0]["text"])
 print(" ")
-
