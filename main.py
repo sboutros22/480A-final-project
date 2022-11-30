@@ -1,15 +1,23 @@
 import os
 import tkinter as tk
+from tkinter import PhotoImage, ttk
+#from tkinter.messagebox import showinfo
+import string
+import tkinter as tk
 from tkinter import Tk, ttk
+import tkinter
 import re
 import requests
 from bs4 import BeautifulSoup
 from tkinter.messagebox import showinfo
 import openai
-from googlesearch import search
-import webbrowser
+from PIL import ImageTk, Image
 
-# Main window
+global photo
+# Initial message to explain the application and how to use it
+print("This application will take your answers and randomly pull locations that match what you wanted.")
+print("For the best results when answering questions, follow the examples shown at the end of each message.")
+
 import os
 import tkinter as tk
 from tkinter import ttk
@@ -51,7 +59,7 @@ def display_selected():
  
 
 def get_results():
-    openai.api_key = "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"
+    openai.api_key = "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"
 
     costPerDay = str(round(int(budget.get())/int(num_people.get())/int(days.get()),2)) # Calculates the cost per day per person
 
@@ -126,7 +134,7 @@ def get_image(URL):
                 if 'http' not in url:
                     url = '{}{}'.format(site, url)
                 response = requests.get(url)
-                f.write(response.content)
+                photo = f.write(response.content)
         print("Download complete, downloaded images can be found in current directory!")
 
 
@@ -196,7 +204,12 @@ select_destination_button.grid(row=100, column=1)
 # Info Frame
 info_f = ttk.Frame(root, relief='solid', borderwidth=2, padding=10)
 info_f.grid(row=1, column=1)
-
+img = ImageTk.PhotoImage(Image.open(photo))
+#frameImg = Frame(win,width=600,height=400)
+label = ttk.Label(root,image = img)
+label.grid(row=10, column=10)
 
 
 root.mainloop()
+
+
