@@ -1,5 +1,17 @@
 import os
 import tkinter as tk
+from tkinter import Tk, ttk
+import re
+import requests
+from bs4 import BeautifulSoup
+from tkinter.messagebox import showinfo
+import openai
+from googlesearch import search
+import webbrowser
+
+# Main window
+import os
+import tkinter as tk
 from tkinter import ttk
 #from tkinter.messagebox import showinfo
 import openai
@@ -31,12 +43,15 @@ def display_selected():
     website_label.grid(row=1, column=0)
 
     for result in search(selected_destination.get(), tld="co.in", num=1, stop=1, pause=2):                           # Google search for hotel website
+        URL = result
         website_button = ttk.Button(info_f, text=selected_destination.get(), command=lambda: open_website(result))
         website_button.grid(row=1, column=1) 
+        get_image(URL)
 
+ 
 
 def get_results():
-    openai.api_key = "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"
+    openai.api_key = "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"
 
     costPerDay = str(round(int(budget.get())/int(num_people.get())/int(days.get()),2)) # Calculates the cost per day per person
 
@@ -95,9 +110,24 @@ def get_results():
     for i in range(len(destinations)):
         r = ttk.Radiobutton(result_f, text=destinations[i], value=destinations[i], variable=selected_destination, command=show_button)
         r.grid(row=i+1, column=0, sticky='w')
-    
-    
-
+        
+def get_image(URL):      
+        site = URL #Url to be used
+        response = requests.get(site)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        image_tags = soup.find_all('img')
+        urls = [img['src'] for img in image_tags]
+        for url in urls:
+            filename = re.search(r'/([\w_-]+[.](jpg|gif|png))$', url)
+            if not filename:
+                print("Regular expression didn't match with the url: {}".format(url))
+                continue
+            with open(filename.group(1), 'wb') as f:
+                if 'http' not in url:
+                    url = '{}{}'.format(site, url)
+                response = requests.get(url)
+                f.write(response.content)
+        print("Download complete, downloaded images can be found in current directory!")
 
 
 # Input Variables
